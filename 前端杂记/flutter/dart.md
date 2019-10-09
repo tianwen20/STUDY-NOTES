@@ -281,3 +281,104 @@
     assert(uri.toString() == 'http://example.org/foo/bar#frag');
   }
   ```
+- 24.Dates and Times
+  代码示例：
+  ```dart
+  main(){
+    var now = new DateTime.now();
+    //2000年，默认本地时区  
+    var y2k = new DateTime(2000);
+    //2000年1月2号
+    y2k = new DateTime(2000,1,2);
+    //utc时区
+    y2k = new DateTime.utc(2000);
+    assert(y2k.millisecondsSinceEpoch == 946684800000);
+    //用unix毫秒时间戳创建
+    y2k = new DateTime.fromMillisecondsSinceEpoch(946684800000,isUtc:true);
+    //使用parse转换一个ISO8601时间
+    y2k = DateTime.parse('2000-01-01T00:00:00Z');
+    //使用duration计算两个日期之间的间隔
+    y2k = new DateTime.utc(2000);
+    //add增加时间
+    var y2001 = y2k.add(const Duration(days:366));
+    assert(y2001.year == 2001);
+    //subtract减少时间  
+    var december2000 = y2001.subtract(const Duration(days:30));
+    assert(december2000.year == 2000);
+    assert(december2000.month == 12);
+    //difference()获取两个时间的差值
+    var duration = y2001.difference(y2k);
+    assert(duration.inDays == 366);
+  }
+  ```
+- 25.实现Comparable接口表明该对象可以相互比较，通常用来排序；compareTo()函数对于小于的值返回<0、相同的值返回0、大于的值返回>0，示例：
+  ```dart
+  class Line implements Comparable{
+    final length;
+    const Line(this.length);
+    int compareTo(Line other)=>length - other.length;
+  }
+  main(){
+    var short = const Line(1);
+    var long = const Line(100);
+    assert(short.compareTo(long)<0);
+  }
+  ```
+- 26.Dart中的每个对象都有一个证书hash码，这样每个对象都可以当作map的key使用；hash码不要求唯一，但是应该有良好的分布形态；相等的对象（==）的hash码应该一样；一般==和hashCode的getter同时覆写；示例：
+  ```dart
+  class Person{
+    final String firstName,lastName;
+    Person(this.firstName,this.lastName);
+    
+    int get hashCode{
+      int result = 17;
+      result = 37*result + firstName.hashCode;
+      result = 37*result + lastName.hashCode;
+      return result;
+    }
+  
+    bool operator ==(other){
+      if(other is! Person) return false;
+      Person person = other;
+      return (person.firstName == firstName && person.lastName == lastName);
+    }  
+  }
+  main(){
+    var p1 = new Person('bob','smith');
+    var p2 = new Person('bob','smith');
+    var p3 = 'not a person';
+    assert(p1.hashCode == p2.hashCode);
+    asser(p1 == p2);
+    assert(p1!=p3);
+  }
+  ```
+- 27.Iteration和Iterator支持for-in循环。当创建一个类时，继承或实现Iterable可以提供一个用于for-in循环的Iterators，示例：
+  ```dart
+  class Process{  
+  }
+  class ProcessIterator implements Iterator<Process>{
+    Process current;
+    bool moveNext(){
+      return false;
+    }
+  }
+  class Processes extends IterableBase<Process>{
+    final Iterator<Process> itertor = new ProcessIterator();
+  }
+  main(){
+    for(var process in new Processes()){
+      
+    }
+  }
+  ```
+- 28.Exceptions，可以实现Exception接口自定义异常;示例：
+  ```dart
+  class FooException implements Exception{
+    final String msg;
+    const FooException([this.msg]);
+    String toString()=>msg??'FooException'; 
+  }
+  ```
+- 29.异步，future和await、async
+- 30.stream，使用stream的listen函数来订阅一些文件
+- 31.mirror-reflection
