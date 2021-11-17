@@ -4,7 +4,7 @@ set dd=%DATE:~0,10%
 set tt=%time:~0,8%
 REM change file directory
 E:
-cd E:\STUDY\SCRIPT
+cd E:\STUDY
 REM start git script 
 git pull origin master
 git status
