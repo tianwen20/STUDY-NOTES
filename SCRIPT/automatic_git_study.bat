@@ -11,4 +11,3 @@ git status
 git add .
 git commit -m "%dd:/=-% %tt%"
 git push origin master
-exit
